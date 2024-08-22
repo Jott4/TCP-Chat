@@ -104,8 +104,7 @@ function encryptMessage(message) {
         encrypt: true,
       });
     case "Cifra de Vigenère":
-      // Implementação da Cifra de Vigenère
-      return message; // Placeholder
+      return vigenereEncrypt(message, secret);
     default:
       return message;
   }
@@ -120,8 +119,7 @@ function decryptMessage(message) {
     case "Cifra de Playfair":
       return playfairCipher({ message, k: secret });
     case "Cifra de Vigenère":
-      // Implementação da decifragem de Vigenère
-      return message; // Placeholder
+      return vigenereDecrypt(message, secret);
     default:
       return message;
   }
@@ -349,3 +347,47 @@ const splitMessage = (message) => {
 
   return pairs;
 };
+
+function vigenereEncrypt(message, key) {
+  const alphabet = "abcdefghijklmnopqrstuvwxyz";
+  let result = "";
+  let keyIndex = 0;
+
+  for (let i = 0; i < message.length; i++) {
+    const char = message[i].toLowerCase();
+    if (alphabet.includes(char)) {
+      const charIndex = alphabet.indexOf(char);
+      const keyChar = key[keyIndex % key.length].toLowerCase();
+      const keyCharIndex = alphabet.indexOf(keyChar);
+      const encryptedIndex = (charIndex + keyCharIndex) % 26;
+      result += alphabet[encryptedIndex];
+      keyIndex++;
+    } else {
+      result += char;
+    }
+  }
+
+  return result;
+}
+
+function vigenereDecrypt(message, key) {
+  const alphabet = "abcdefghijklmnopqrstuvwxyz";
+  let result = "";
+  let keyIndex = 0;
+
+  for (let i = 0; i < message.length; i++) {
+    const char = message[i].toLowerCase();
+    if (alphabet.includes(char)) {
+      const charIndex = alphabet.indexOf(char);
+      const keyChar = key[keyIndex % key.length].toLowerCase();
+      const keyCharIndex = alphabet.indexOf(keyChar);
+      const decryptedIndex = (charIndex - keyCharIndex + 26) % 26;
+      result += alphabet[decryptedIndex];
+      keyIndex++;
+    } else {
+      result += char;
+    }
+  }
+
+  return result;
+}
