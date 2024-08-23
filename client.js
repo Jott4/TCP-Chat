@@ -117,7 +117,9 @@ function decryptMessage(message) {
     case "Substituição Monoalfabética":
       return monoAlphabeticCipher({ message, k: secret, decrypt: true });
     case "Cifra de Playfair":
-      return playfairCipher({ message, k: secret });
+      console.log("message", message);
+
+      return playfairCipher({ message: message, k: secret });
     case "Cifra de Vigenère":
       return vigenereDecrypt(message, secret);
     default:
@@ -183,10 +185,13 @@ const playfairCipher = ({ message, k, encrypt }) => {
   const grid = generateGrid(k);
 
   const pairs = splitMessage(message.replace("j", "i"));
+
   if (encrypt) {
     const messageEncoded = [];
+
     for (const item of pairs) {
-      messageEncoded.push(playfairEncode(grid, item));
+      const encoded = playfairEncode(grid, item);
+      messageEncoded.push(encoded);
     }
 
     return messageEncoded.join("");
@@ -207,6 +212,9 @@ const playfairEncode = (grid, pair) => {
     if (rows.includes(first) && rows.includes(second)) {
       const firstLetter = rows[(rows.indexOf(first) + 1) % 5];
       const secondLetter = rows[(rows.indexOf(second) + 1) % 5];
+
+      console.log("regra da linha", firstLetter, secondLetter);
+
       return `${firstLetter}${secondLetter}`;
     }
   }
@@ -220,6 +228,9 @@ const playfairEncode = (grid, pair) => {
     if (column.includes(first) && column.includes(second)) {
       const firstLetter = column[(column.indexOf(first) + 1) % 5];
       const secondLetter = column[(column.indexOf(second) + 1) % 5];
+
+      console.log("regra da coluna", firstLetter, secondLetter);
+
       return `${firstLetter}${secondLetter}`;
     }
   }
@@ -241,6 +252,8 @@ const playfairEncode = (grid, pair) => {
 
   const newFirstLetter = grid[firstRow][secondColumn];
   const newSecondLetter = grid[secondRow][firstColumn];
+
+  console.log(newFirstLetter, newSecondLetter);
 
   return `${newFirstLetter}${newSecondLetter}`;
 };

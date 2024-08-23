@@ -45,7 +45,7 @@ const server = net.createServer((socket) => {
     // Broadcasts the message to all clients except who sent
     clients.forEach((client) => {
       if (client !== socket) {
-        client.write(clientColor(`${formattedMessage}`));
+        client.write(message);
       }
     });
   });
