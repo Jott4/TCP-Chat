@@ -14,6 +14,10 @@ const colors = [
   // chalk.gray, // bad contrast
 ];
 
+function binaryToHex(binary) {
+  return parseInt(binary, 2).toString(16);
+}
+
 // Creating TCP server
 const server = net.createServer((socket) => {
   clientCount++;
@@ -38,15 +42,10 @@ const server = net.createServer((socket) => {
     if (message.length === 0) {
       return;
     }
-    // message to ascii table
-    const messageAscii = message
-      .split("")
-      .map((char) => char.charCodeAt(0))
-      .join(" ");
 
-    console.log(clientColor(`Message from ${clientName}: ${messageAscii}`));
+    console.log(clientColor(`Message from ${clientName}: ${message}`));
 
-    const formattedMessage = `${clientName}: ${message}`;
+    const formattedMessage = `${clientName}: ${binaryToHex(message)}`;
     console.log(clientColor(formattedMessage));
 
     // Broadcasts the message to all clients except who sent
